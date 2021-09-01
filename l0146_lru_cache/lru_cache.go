@@ -1,29 +1,32 @@
-package l0146_lru_cache
+package leetcode0146
 
+// LRUCache struct
 type LRUCache struct {
-	size int
-	capacity int
-	cache map[int]*DLinkedNode
+	size       int
+	capacity   int
+	cache      map[int]*DLinkedNode
 	head, tail *DLinkedNode
 }
 
+// DLinkedNode struct
 type DLinkedNode struct {
 	key, value int
 	prev, next *DLinkedNode
 }
 
 func initLinkedNode(key, value int) *DLinkedNode {
-	return &DLinkedNode {
-		key: key,
+	return &DLinkedNode{
+		key:   key,
 		value: value,
 	}
 }
 
+// Constructor LRUCache
 func Constructor(capacity int) LRUCache {
-	l := LRUCache {
-		cache: map[int]*DLinkedNode{},
-		head: initLinkedNode(0, 0),
-		tail: initLinkedNode(0, 0),
+	l := LRUCache{
+		cache:    map[int]*DLinkedNode{},
+		head:     initLinkedNode(0, 0),
+		tail:     initLinkedNode(0, 0),
 		capacity: capacity,
 	}
 	l.head.next = l.tail
@@ -31,52 +34,54 @@ func Constructor(capacity int) LRUCache {
 	return l
 }
 
-func (this *LRUCache) Get(key int) int {
-	if _, ok := this.cache[key]; !ok {
+// Get LRUCache
+func (lru *LRUCache) Get(key int) int {
+	if _, ok := lru.cache[key]; !ok {
 		return -1
 	}
-	node := this.cache[key]
-	this.moveToHead(node)
+	node := lru.cache[key]
+	lru.moveToHead(node)
 	return node.value
 }
 
-func (this *LRUCache) Put(key, value int) {
-	if _, ok := this.cache[key]; !ok {
+// Put LRUCache
+func (lru *LRUCache) Put(key, value int) {
+	if _, ok := lru.cache[key]; !ok {
 		node := initLinkedNode(key, value)
-		this.cache[key] = node
-		this.addToHead(node)
-		this.size++
-		if this.size > this.capacity {
-			removed := this.removeTail()
-			delete(this.cache, removed.key)
-			this.size--
+		lru.cache[key] = node
+		lru.addToHead(node)
+		lru.size++
+		if lru.size > lru.capacity {
+			removed := lru.removeTail()
+			delete(lru.cache, removed.key)
+			lru.size--
 		}
 	} else {
-		node := this.cache[key]
+		node := lru.cache[key]
 		node.value = value
-		this.moveToHead(node)
+		lru.moveToHead(node)
 	}
 }
 
-func (this *LRUCache) addToHead(node *DLinkedNode) {
-	node.prev = this.head
-	node.next = this.head.next
-	this.head.next.prev = node
-	this.head.next = node
+func (lru *LRUCache) addToHead(node *DLinkedNode) {
+	node.prev = lru.head
+	node.next = lru.head.next
+	lru.head.next.prev = node
+	lru.head.next = node
 }
 
-func (this *LRUCache) removeNode(node *DLinkedNode) {
+func (lru *LRUCache) removeNode(node *DLinkedNode) {
 	node.prev.next = node.next
 	node.next.prev = node.prev
 }
 
-func (this *LRUCache) moveToHead(node *DLinkedNode) {
-	this.removeNode(node)
-	this.addToHead(node)
+func (lru *LRUCache) moveToHead(node *DLinkedNode) {
+	lru.removeNode(node)
+	lru.addToHead(node)
 }
 
-func (this *LRUCache) removeTail() *DLinkedNode {
-	node := this.tail.prev
-	this.removeNode(node)
+func (lru *LRUCache) removeTail() *DLinkedNode {
+	node := lru.tail.prev
+	lru.removeNode(node)
 	return node
 }

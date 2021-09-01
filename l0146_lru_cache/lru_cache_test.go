@@ -1,8 +1,9 @@
-package l0146_lru_cache
+package leetcode0146
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCase_1(t *testing.T) {

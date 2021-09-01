@@ -1,4 +1,4 @@
-package l0001_add_two_numbers
+package leetcode0001
 
 func twoSum(nums []int, target int) []int {
 	hashTable := map[int]int{}
