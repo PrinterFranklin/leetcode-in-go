@@ -19,19 +19,20 @@ struct ListNode* mergeTwoLists(struct ListNode *l1, struct ListNode *l2) {
     }
 }
 
-struct ListNode* TwoLists(struct ListNode** lists, int left, int right) {
+/* a hepler function */
+struct ListNode* mergeLists(struct ListNode** lists, int left, int right) {
     if (left == right)
         return lists[left];
     if (left > right)
         return NULL;
     int mid = left + (right - left) / 2;
-    struct ListNode *l1 = TwoLists(lists, left, mid);
-    struct ListNode *l2 = TwoLists(lists, mid+1, right);
+    struct ListNode *l1 = mergeLists(lists, left, mid);
+    struct ListNode *l2 = mergeLists(lists, mid+1, right);
     return mergeTwoLists(l1, l2);
 }
 
 struct ListNode* mergeKLists(struct ListNode** lists, int listsSize) {
     if (!listsSize)
         return NULL;
-    return TwoLists(lists, 0, listsSize-1);
+    return mergeLists(lists, 0, listsSize-1);
 }
