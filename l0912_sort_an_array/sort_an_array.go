@@ -100,12 +100,21 @@ func sortArray4(nums []int) []int {
 	return nil
 }
 
-// Solution 5: Bubble Sort
+// Solution 5: Bubble Sort (too slow)
 // Time: O(N^2)
 // Space: O(1)
 // Stable: yes
 func sortArray5(nums []int) []int {
-	return nil
+	// Loop 1: compare n-1 times to find the largest element
+	for i := 0; i < len(nums)-1; i++ {
+		// Loop 2: reduce array capacity
+		for j := 0; j < len(nums)-1-i; j++ {
+			if nums[j] > nums[j+1] {
+				nums[j], nums[j+1] = nums[j+1], nums[j]
+			}
+		}
+	}
+	return nums
 }
 
 // Solution 6: Selection Sort
