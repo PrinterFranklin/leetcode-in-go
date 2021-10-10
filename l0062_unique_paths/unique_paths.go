@@ -1,6 +1,7 @@
 package leetcode0062
 
 func uniquePaths(m int, n int) int {
+	// initial the result matrix
 	res := make([][]int, m)
 	for i := range res {
 		res[i] = make([]int, n)
