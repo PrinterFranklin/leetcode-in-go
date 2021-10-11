@@ -77,11 +77,38 @@ func sortArray2(nums []int) []int {
 }
 
 func heapSort(nums []int) {
-
+	n := len(nums)
+	// Step 1: build max heap
+	for i := n/2 - 1; i >= 0; i-- {
+		heapify(nums, n, i)
+	}
+	// Step 2: one by one extract an element from heap
+	for i := n - 1; i > 0; i-- {
+		nums[i], nums[0] = nums[0], nums[i]
+		// call max heapify on the reduced heap
+		heapify(nums, i, 0)
+	}
 }
 
-func sink(nums []int, i, len int) {
-
+// heapify a subtree rooted with node i (an index in array)
+// n is size of heap
+func heapify(nums []int, n, i int) {
+	max := i
+	// l is left subtree node index
+	l := 2*i + 1
+	// r is right subtree node index
+	r := 2*i + 2
+	// find the largest elements and put it on root
+	if l < n && nums[l] > nums[max] {
+		max = l
+	}
+	if r < n && nums[r] > nums[max] {
+		max = r
+	}
+	if max != i {
+		nums[i], nums[max] = nums[max], nums[i]
+		heapify(nums, n, max)
+	}
 }
 
 // Solution 3: Merge Sort (fast)
@@ -93,6 +120,7 @@ func sortArray3(nums []int) []int {
 	return nums
 }
 
+// C style
 func mergeSort(nums []int, l, r int) {
 	if l < r {
 		m := (l + r) / 2
@@ -141,6 +169,41 @@ func merge(nums []int, l, m, r int) {
 		j++
 		k++
 	}
+}
+
+// Go style (more memory cost)
+func mergeSort1(nums []int) []int {
+	if len(nums) <= 1 {
+		return nums
+	}
+	m := len(nums) / 2
+	left := mergeSort1(nums[:m])
+	right := mergeSort1(nums[m:])
+	return merge1(left, right)
+}
+
+func merge1(left, right []int) []int {
+	n1, n2 := len(left), len(right)
+	// Notice: length should be 0 to append
+	res := make([]int, 0, n1+n2)
+
+	i, j := 0, 0
+	for i < n1 && j < n2 {
+		if left[i] < right[j] {
+			res = append(res, left[i])
+			i++
+		} else {
+			res = append(res, right[j])
+			j++
+		}
+	}
+	if i < n1 {
+		res = append(res, left[i:]...)
+	}
+	if j < n2 {
+		res = append(res, right[j:]...)
+	}
+	return res
 }
 
 // Solution 4: Insertion Sort (slow)
