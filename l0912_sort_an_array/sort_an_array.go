@@ -230,13 +230,19 @@ func sortArray4(nums []int) []int {
 // Space: O(1)
 // Stable: yes
 func sortArray5(nums []int) []int {
+	// Optional: an optimization
+	flag := false
 	// Loop 1: compare n-1 times to find the largest element
 	for i := 0; i < len(nums)-1; i++ {
 		// Loop 2: reduce array capacity
 		for j := 0; j < len(nums)-1-i; j++ {
 			if nums[j] > nums[j+1] {
 				nums[j], nums[j+1] = nums[j+1], nums[j]
+				flag = true
 			}
+		}
+		if !flag {
+			break
 		}
 	}
 	return nums
