@@ -2,8 +2,11 @@ package leetcode0704
 
 func search(nums []int, target int) int {
 	lo, hi := 0, len(nums)-1
+	// quit when the interval is empty, use '<=' instead of '<'
 	for lo <= hi {
-		mid := (hi-lo)/2 + lo
+		// prevent integer overflow
+		// better performance: mid := lo + ((hi - lo) >> 1)
+		mid := lo + (hi-lo)/2
 		if nums[mid] == target {
 			return mid
 		} else if nums[mid] > target {
