@@ -5,7 +5,9 @@ type ListNode struct {
 	Next *ListNode
 }
 
-// Recursive
+// Solution 1: Recursion
+// Time: O(n)
+// Space: O(n)
 func reverseList(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
@@ -16,8 +18,10 @@ func reverseList(head *ListNode) *ListNode {
 	return res
 }
 
-// Iteration
-func reverseList2(head *ListNode) *ListNode {
+// Solution 2: Iteration
+// Time: O(n)
+// Space: O(1)
+func reverseList1(head *ListNode) *ListNode {
 	var pre *ListNode
 	cur := head
 	for cur != nil {
