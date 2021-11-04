@@ -2,9 +2,12 @@ package leetcode0146
 
 // LRUCache struct
 type LRUCache struct {
-	size       int
-	capacity   int
-	cache      map[int]*DLinkedNode
+	// when size is bigger than capacity, we need to remove tail node
+	size     int
+	capacity int
+	// to get node in O(1), we use hash map to store node
+	cache map[int]*DLinkedNode
+	// we only insert or delete node from head and tail, so keep the node here
 	head, tail *DLinkedNode
 }
 
@@ -23,15 +26,15 @@ func initLinkedNode(key, value int) *DLinkedNode {
 
 // Constructor LRUCache
 func Constructor(capacity int) LRUCache {
-	l := LRUCache{
+	lru := LRUCache{
 		cache:    map[int]*DLinkedNode{},
 		head:     initLinkedNode(0, 0),
 		tail:     initLinkedNode(0, 0),
 		capacity: capacity,
 	}
-	l.head.next = l.tail
-	l.tail.prev = l.head
-	return l
+	lru.head.next = lru.tail
+	lru.tail.prev = lru.head
+	return lru
 }
 
 // Get LRUCache
@@ -52,9 +55,7 @@ func (lru *LRUCache) Put(key, value int) {
 		lru.addToHead(node)
 		lru.size++
 		if lru.size > lru.capacity {
-			removed := lru.removeTail()
-			delete(lru.cache, removed.key)
-			lru.size--
+			lru.removeTail()
 		}
 	} else {
 		node := lru.cache[key]
@@ -80,8 +81,9 @@ func (lru *LRUCache) moveToHead(node *DLinkedNode) {
 	lru.addToHead(node)
 }
 
-func (lru *LRUCache) removeTail() *DLinkedNode {
+func (lru *LRUCache) removeTail() {
 	node := lru.tail.prev
 	lru.removeNode(node)
-	return node
+	delete(lru.cache, node.key)
+	lru.size--
 }
