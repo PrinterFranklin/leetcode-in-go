@@ -55,9 +55,7 @@ func (lru *LRUCache) Put(key, value int) {
 		lru.addToHead(node)
 		lru.size++
 		if lru.size > lru.capacity {
-			removed := lru.removeTail()
-			delete(lru.cache, removed.key)
-			lru.size--
+			lru.removeTail()
 		}
 	} else {
 		node := lru.cache[key]
@@ -83,8 +81,9 @@ func (lru *LRUCache) moveToHead(node *DLinkedNode) {
 	lru.addToHead(node)
 }
 
-func (lru *LRUCache) removeTail() *DLinkedNode {
+func (lru *LRUCache) removeTail() {
 	node := lru.tail.prev
 	lru.removeNode(node)
-	return node
+	delete(lru.cache, node.key)
+	lru.size--
 }
