@@ -6,35 +6,60 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func reverseList(head, tail *ListNode) (*ListNode, *ListNode) {
-	pre := tail.Next
+// Solution 1: Iteration
+// Time: O(n)
+// Space: O(1)
+func reverseKGroup(head *ListNode, k int) *ListNode {
+	dummy := &ListNode{Next: head}
+	pre, end := dummy, head
+	for end != nil {
+		for i := 0; i < k-1; i++ {
+			end = end.Next
+			if end == nil {
+				return dummy.Next
+			}
+		}
+		start := pre.Next
+		next := end.Next
+		end.Next = nil
+		pre.Next = reverseList(start)
+		start.Next = next
+		pre = start
+		end = pre.Next
+	}
+	return dummy.Next
+}
+
+func reverseList(head *ListNode) *ListNode {
+	var pre *ListNode
 	cur := head
-	for pre != tail {
+	for cur != nil {
 		tmp := cur.Next
 		cur.Next = pre
 		pre = cur
 		cur = tmp
 	}
-	return tail, head
+	return pre
 }
 
-func reverseKGroup(head *ListNode, k int) *ListNode {
-	dummy := &ListNode{Next: head}
-	pre := dummy
-	for head != nil {
-		tail := pre
-		for i := 0; i < k; i++ {
-			tail = tail.Next
-			if tail == nil {
-				return dummy.Next
-			}
+// Solution 2: Recursion
+// Time: O(n)
+// Space: O(n)
+func reverseKGroup1(head *ListNode, k int) *ListNode {
+	next := head
+	for i := 0; i < k; i++ {
+		if next == nil {
+			return head
 		}
-		tmp := tail.Next
-		head, tail = reverseList(head, tail)
-		pre.Next = head
-		tail.Next = tmp
-		pre = tail
-		head = tail.Next
+		next = next.Next
 	}
-	return dummy.Next
+	pre := reverseKGroup1(next, k)
+	cur := head
+	for i := 0; i < k; i++ {
+		tmp := cur.Next
+		cur.Next = pre
+		pre = cur
+		cur = tmp
+	}
+	return pre
 }
