@@ -78,7 +78,7 @@ func sortArray2(nums []int) []int {
 
 func heapSort(nums []int) {
 	n := len(nums)
-	// Step 1: build max heap
+	// Step 1: build max heap (from the first non-leaf node)
 	for i := n/2 - 1; i >= 0; i-- {
 		heapify(nums, n, i)
 	}
