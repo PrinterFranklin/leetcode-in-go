@@ -13,8 +13,8 @@ func TestGenerateParentheses(t *testing.T) {
 	}
 	a := []testArr{
 		{n: 1, result: []string{"()"}},
-		{n: 2, result: []string{"()()", "(())"}},
-		{n: 3, result: []string{"()()()", "(()())", "()(())", "(())()", "((()))"}},
+		{n: 2, result: []string{"(())", "()()"}},
+		{n: 3, result: []string{"((()))", "(()())", "(())()", "()(())", "()()()"}},
 	}
 	for _, v := range a {
 		re := generateParenthesis(v.n)
