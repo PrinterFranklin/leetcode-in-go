@@ -11,17 +11,14 @@ func lengthOfLongestSubstring(s string) int {
 	// init hash map (char -> index)
 	set := map[byte]int{}
 	for right < len(s) {
-		if _, ok := set[s[right]]; !ok {
-			// Case 1: if char is not in the set, put it in
-			set[s[right]] = right
-		} else {
-			// Case 2: if char is in the set, move left index
-			if set[s[right]]+1 >= left {
+		if _, ok := set[s[right]]; ok {
+			// if char is in the set, move left index
+			if set[s[right]] >= left {
 				left = set[s[right]] + 1
 			}
-			// refresh the index
-			set[s[right]] = right
 		}
+		// add or refresh the index
+		set[s[right]] = right
 		// record the max length
 		res = max(right-left+1, res)
 		right++
